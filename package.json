@@ -1,0 +1,35 @@
+{
+  "name": "htmldiff",
+  "version": "1.0.0",
+  "description": "A library for comparing two HTML files/snippets and highlighting the differences using simple HTML.",
+  "main": "dist/htmldiff.js",
+  "scripts": {
+    "start": "webpack --mode production",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frattaro/htmldiff.js.git"
+  },
+  "keywords": [
+    "html",
+    "diff"
+  ],
+  "author": "Anton Frattaroli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frattaro/htmldiff.js/issues"
+  },
+  "homepage": "https://github.com/frattaro/htmldiff.js#readme",
+  "devDependencies": {
+    "babel-core": "6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "4.9.0",
+    "eslint-loader": "2.0.0",
+    "webpack": "^4.14.0",
+    "webpack-cli": "^3.0.8"
+  }
+}

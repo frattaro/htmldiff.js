@@ -9,7 +9,8 @@ There also looks to be other implementations in CoffeeScript, as well as an Angu
 
 */
 
-function HtmlDiff(oldText, newText) {
+
+const HtmlDiff = function (oldText, newText) {
     /// <summary>
     /// This value defines balance between speed and memory utilization. The higher it is the faster it works and more memory consumes.
     /// </summary>
@@ -18,7 +19,7 @@ function HtmlDiff(oldText, newText) {
     this._content = [];
     this._newText = newText;
     this._oldText = oldText;
-    var that = this;
+    const that = this;
 
     this._specialCaseClosingTags = {
         '</strong>': 0,
@@ -34,7 +35,7 @@ function HtmlDiff(oldText, newText) {
         '</s>': 0
     };
 
-    this._specialCaseOpeningTagRegex = new RegExp(/<((strong)|(b)|(i)|(em)|(big)|(small)|(u)|(sub)|(sup)|(strike)|(s))[\>\s]+/i);
+    this._specialCaseOpeningTagRegex = new RegExp(/<((strong)|(b)|(i)|(em)|(big)|(small)|(u)|(sub)|(sup)|(strike)|(s))[>\s]+/i);
 
     this._specialTagDiffStack = [];
 
@@ -110,7 +111,7 @@ function HtmlDiff(oldText, newText) {
         that._blockExpressions.push(expression);
     };
 
-    var SplitInputsToWords = function () {
+    const SplitInputsToWords = function () {
         that._oldWords = HtmlDiff.WordSplitter.ConvertHtmlToListOfWords(that._oldText, that._blockExpressions);
         that._oldText = null;
 
@@ -118,7 +119,7 @@ function HtmlDiff(oldText, newText) {
         that._newText = null;
     };
 
-    var PerformOperation = function (operation) {
+    const PerformOperation = function (operation) {
         switch (operation.Action) {
             case HtmlDiff.Action.Equal:
                 ProcessEqualOperation(operation);
@@ -137,20 +138,20 @@ function HtmlDiff(oldText, newText) {
         }
     };
 
-    var ProcessReplaceOperation = function (operation) {
+    const ProcessReplaceOperation = function (operation) {
         ProcessDeleteOperation(operation, 'diffmod');
         ProcessInsertOperation(operation, 'diffmod');
     };
 
-    var ProcessInsertOperation = function (operation, cssClass) {
+    const ProcessInsertOperation = function (operation, cssClass) {
         InsertTag('ins', cssClass, that._newWords.slice(operation.StartInNew, operation.EndInNew));
     };
 
-    var ProcessDeleteOperation = function (operation, cssClass) {
+    const ProcessDeleteOperation = function (operation, cssClass) {
         InsertTag('del', cssClass, that._oldWords.slice(operation.StartInOld, operation.EndInOld));
     };
 
-    var ProcessEqualOperation = function (operation) {
+    const ProcessEqualOperation = function (operation) {
         that._content.push(that._newWords.slice(operation.StartInNew, operation.EndInNew).join(''));
     };
 
@@ -174,12 +175,8 @@ function HtmlDiff(oldText, newText) {
     /// <param name="tag"></param>
     /// <param name="cssClass"></param>
     /// <param name="words"></param>
-    var InsertTag = function (tag, cssClass, words) {
-        while (true) {
-            if (words.length === 0) {
-                break;
-            }
-
+    const InsertTag = function (tag, cssClass, words) {
+        while (words.length > 0) {
             let nonTags = ExtractConsecutiveWords(words, function (x) { return !HtmlDiff.Utils.IsTag(x); });
 
             let specialCaseTagInjection = '';
@@ -239,7 +236,7 @@ function HtmlDiff(oldText, newText) {
         }
     };
 
-    var ExtractConsecutiveWords = function (words, condition) {
+    const ExtractConsecutiveWords = function (words, condition) {
         let indexOfFirstTag = null;
 
         for (let i = 0; i < words.length; i++) {
@@ -270,7 +267,7 @@ function HtmlDiff(oldText, newText) {
         return items;
     };
 
-    var Operations = function () {
+    const Operations = function () {
         let positionInOld = 0, positionInNew = 0;
         let operations = [];
 
@@ -292,7 +289,7 @@ function HtmlDiff(oldText, newText) {
                 action = HtmlDiff.Action.Replace;
             }
             else if (matchStartsAtCurrentPositionInOld
-                        && matchStartsAtCurrentPositionInNew === false) {
+                && matchStartsAtCurrentPositionInNew === false) {
                 action = HtmlDiff.Action.Insert;
             }
             else if (matchStartsAtCurrentPositionInOld === false) {
@@ -328,7 +325,7 @@ function HtmlDiff(oldText, newText) {
         return operations;
     };
 
-    var RemoveOrphans = function (matches) {
+    const RemoveOrphans = function (matches) {
         let matchesNoOrphans = [];
         let prev = null;
         let curr = null;
@@ -375,13 +372,13 @@ function HtmlDiff(oldText, newText) {
         return matchesNoOrphans;
     };
 
-    var MatchingBlocks = function () {
+    const MatchingBlocks = function () {
         var matchingBlocks = [];
         FindMatchingBlocks(0, that._oldWords.length, 0, that._newWords.length, matchingBlocks);
         return matchingBlocks;
     };
 
-    var FindMatchingBlocks = function (startInOld, endInOld, startInNew, endInNew, matchingBlocks) {
+    const FindMatchingBlocks = function (startInOld, endInOld, startInNew, endInNew, matchingBlocks) {
         let match = FindMatch(startInOld, endInOld, startInNew, endInNew);
 
         if (match !== null) {
@@ -397,7 +394,7 @@ function HtmlDiff(oldText, newText) {
         }
     };
 
-    var FindMatch = function (startInOld, endInOld, startInNew, endInNew) {
+    const FindMatch = function (startInOld, endInOld, startInNew, endInNew) {
         // For large texts it is more likely that there is a Match of size bigger than maximum granularity.
         // If not then go down and try to find it with smaller granularity.
         for (let i = that._matchGranularity; i > 0; i--) {
@@ -415,7 +412,7 @@ function HtmlDiff(oldText, newText) {
 
         return null;
     };
-}
+};
 
 /* STATIC OBJECTS */
 
@@ -439,7 +436,7 @@ HtmlDiff.Utils = {
     ClosingTagTexRegex: new RegExp(/^\s*<\/[^>]+>\s*$/),
     TagWordRegex: new RegExp(/<[^\s>]+/),
     WhitespaceRegex: new RegExp(/^(\s|&nbsp;)+$/),
-    WordRegex: new RegExp(/[\w\#@]+/),
+    WordRegex: new RegExp(/[\w#@]+/),
     SpecialCaseWordTags: ['<img'],
     IsTag: function (item) {
         for (let i = 0; i < HtmlDiff.Utils.SpecialCaseWordTags.length; i++) {
@@ -859,3 +856,5 @@ HtmlDiff.MatchFinder = function (oldWords, newWords, startInOld, endInOld, start
         }
     };
 };
+
+export default HtmlDiff;

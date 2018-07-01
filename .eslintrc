@@ -1,0 +1,13 @@
+{
+  "extends": "eslint:recommended",
+  "globals": {
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "curly": "error",
+    "quotes": [ "error", "single" ]
+  }
+}
